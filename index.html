@@ -93,8 +93,8 @@ body::after {
 /* ── GRIDS ── */
 .grid-couple {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px; margin-top:16px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px; margin-top:16px;
 }
 .grid-ind {
   display:grid;
@@ -102,7 +102,7 @@ body::after {
   gap:14px; margin-top:16px;
 }
 
-/* ── CARD ── */
+/* ── CARD BASE ── */
 .card {
   position:relative;
   background:linear-gradient(155deg,var(--bg3),var(--bg2));
@@ -110,47 +110,91 @@ body::after {
   cursor:pointer; overflow:hidden; text-align:center;
   transition:border-color .3s, transform .28s, box-shadow .28s;
   -webkit-tap-highlight-color:transparent;
-  padding:22px 16px 18px;
   user-select:none;
 }
 .card::before {
   content:''; position:absolute; inset:0;
   background:linear-gradient(135deg,rgba(201,162,39,.07),transparent);
-  opacity:0; transition:opacity .3s; pointer-events:none;
+  opacity:0; transition:opacity .3s; pointer-events:none; z-index:1;
 }
 .card:hover::before { opacity:1; }
 .card:hover { border-color:rgba(201,162,39,.5); transform:translateY(-3px); box-shadow:0 12px 36px rgba(201,162,39,.15); }
 .card:active { transform:scale(.98); }
 .card.selected {
   border-color:var(--gold);
-  background:linear-gradient(155deg,rgba(201,162,39,.1),var(--bg2));
   box-shadow:0 0 30px rgba(201,162,39,.26),inset 0 0 24px rgba(201,162,39,.06);
 }
 .card.voted {
   border-color:var(--gold);
-  background:linear-gradient(155deg,rgba(201,162,39,.12),var(--bg2));
   cursor:default;
 }
 .card::after {
   content:'◆'; position:absolute; top:7px; right:8px;
-  font-size:.35rem; color:var(--gold-d); opacity:.4; pointer-events:none;
+  font-size:.35rem; color:var(--gold-d); opacity:.4; pointer-events:none; z-index:2;
 }
-.card-glow {
-  position:absolute; top:-45%; left:50%; transform:translateX(-50%);
-  width:100%; height:100%;
-  background:radial-gradient(ellipse at center,rgba(201,162,39,.17),transparent 70%);
-  opacity:0; transition:opacity .3s; pointer-events:none;
-}
-.card.selected .card-glow, .card:hover .card-glow { opacity:1; }
 
-/* card contents */
-.card-emoji {
-  font-size:2rem; margin-bottom:8px; display:block;
-  filter:drop-shadow(0 0 10px rgba(201,162,39,.5));
+/* ── COUPLE CARD with photo ── */
+.couple-card {
+  padding: 0;           /* no padding — photo fills top */
 }
-.card-order { font-family:'Cinzel',serif; font-size:.57rem; letter-spacing:.36em; color:var(--tx-d); margin-bottom:10px; }
-.card-theme { font-family:'Cinzel Decorative',serif; font-size:.9rem; color:var(--gold-l); margin-bottom:14px; line-height:1.3; }
-.card-rule { width:44px; height:1px; background:linear-gradient(90deg,transparent,var(--gold-d),transparent); margin:0 auto 14px; }
+
+/* Photo container */
+.couple-photo {
+  position: relative;
+  width: 100%;
+  padding-top: 62%;     /* aspect ratio ~16:10 */
+  overflow: hidden;
+  background: var(--bg3);
+}
+.couple-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform .5s ease;
+  filter: brightness(.88) saturate(1.05);
+}
+.card:hover .couple-photo img { transform: scale(1.04); }
+.card.selected .couple-photo img { filter: brightness(.95) saturate(1.1); }
+
+/* golden frame overlay on photo */
+.couple-photo::after {
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(9,7,4,.75) 100%
+  );
+  pointer-events:none;
+}
+
+/* theme badge sits over photo bottom */
+.couple-theme-badge {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 2;
+  padding: 20px 14px 10px;
+  text-align: center;
+}
+.couple-theme-badge .card-order {
+  font-family:'Cinzel',serif; font-size:.54rem; letter-spacing:.36em;
+  color:rgba(240,208,96,.75); margin-bottom:4px;
+}
+.couple-theme-badge .card-theme {
+  font-family:'Cinzel Decorative',serif; font-size:.88rem;
+  color:var(--gold-l); line-height:1.3;
+  text-shadow: 0 1px 8px rgba(0,0,0,.8);
+}
+
+/* card body below photo */
+.couple-body {
+  padding: 14px 16px 16px;
+}
+.card-rule { width:44px; height:1px; background:linear-gradient(90deg,transparent,var(--gold-d),transparent); margin:0 auto 13px; }
 
 .couple-members { display:flex; align-items:flex-start; justify-content:center; gap:8px; }
 .member { flex:1; min-width:0; }
@@ -159,13 +203,25 @@ body::after {
 .member-cls { font-size:.68rem; color:var(--tx-d); font-style:italic; }
 .couple-sep { font-size:1rem; color:var(--gold); padding-top:14px; flex-shrink:0; opacity:.6; }
 
+/* ── INDIVIDUAL CARD ── */
+.ind-card { padding:22px 16px 18px; }
+.card-emoji {
+  font-size:2rem; margin-bottom:8px; display:block;
+  filter:drop-shadow(0 0 10px rgba(201,162,39,.5));
+}
 .ind-name { font-family:'Cinzel',serif; font-size:.82rem; color:var(--gold-l); margin-bottom:4px; line-height:1.35; }
 .ind-cls { font-size:.72rem; color:var(--tx-d); font-style:italic; }
 
+/* ── CARD BOTTOM ROW (shared) ── */
 .card-bot {
-  margin-top:14px; display:flex; align-items:center; justify-content:center; gap:7px;
-  font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.15em; color:var(--tx-d); transition:color .3s;
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.15em;
+  color:var(--tx-d); transition:color .3s;
+  position:relative; z-index:2;
 }
+.couple-card .card-bot { padding:0 16px 14px; }
+.ind-card   .card-bot { margin-top:14px; }
+
 .chk {
   width:16px; height:16px; border:1px solid rgba(201,162,39,.3); border-radius:50%;
   display:inline-flex; align-items:center; justify-content:center;
@@ -173,6 +229,10 @@ body::after {
 }
 .card.selected .chk, .card.voted .chk { background:var(--gold); border-color:var(--gold); color:var(--bg); }
 .card.selected .card-bot, .card.voted .card-bot { color:var(--gold); }
+
+/* selected gold border glow */
+.card.selected { background:linear-gradient(155deg,rgba(201,162,39,.07),var(--bg2)); }
+.card.voted    { background:linear-gradient(155deg,rgba(201,162,39,.1),var(--bg2)); }
 
 /* ── SUBMIT ── */
 #submit-wrap { margin:44px 0 12px; text-align:center; }
@@ -277,8 +337,8 @@ footer {
   .hero-school { letter-spacing:.22em; font-size:.6rem; }
   .grid-couple { grid-template-columns:1fr; gap:14px; }
   .grid-ind { grid-template-columns:1fr 1fr; gap:12px; }
-  .card { padding:18px 13px 15px; }
-  .card-theme { font-size:.82rem; }
+  .ind-card { padding:18px 13px 15px; }
+  .couple-theme-badge .card-theme { font-size:.8rem; }
   .couple-members { gap:6px; }
   .member-name { font-size:.7rem; }
   .prog-row { gap:10px; }
@@ -370,13 +430,45 @@ footer {
   const app = initializeApp(firebaseConfig);
   const db  = getDatabase(app);
 
-  /* ── DATA ── */
+  /* ─────────────────────────────────────────────
+     DATA
+     Photo filenames go in the `photo` field.
+     Place the image files in the same folder as
+     index.html and just set the filename here.
+     e.g.  photo: "couple1.jpg"
+     Supported formats: jpg, jpeg, png, webp
+  ───────────────────────────────────────────── */
   const couples = [
-    { id:"couple1", theme:"Hathor și Horus",     emoji:"👑✨", miss:"Jiga Ștefania",     missClass:"IX A", mister:"Vărzar Luca",      misterClass:"IX D", order:"Perechea a 4-a" },
-    { id:"couple2", theme:"Nephthys și Ra",       emoji:"🤍✨", miss:"Nistor Natalia",    missClass:"IX D", mister:"Cotrău Răzvan",    misterClass:"IX B", order:"Perechea a 3-a" },
-    { id:"couple3", theme:"Cleopatra și Ramses",  emoji:"🤎✨", miss:"Popoviciu Claudia", missClass:"IX A", mister:"Pop Alessandro",   misterClass:"IX D", order:"Perechea a 2-a" },
-    { id:"couple4", theme:"Isis și Osiris",       emoji:"👑✨", miss:"Andrași Bianca",    missClass:"IX A", mister:"Sudrijan Cătălin", misterClass:"X D",  order:"Prima Pereche"  }
+    {
+      id:"couple1", theme:"Hathor și Horus",
+      photo: "couple1.jpg",          // ← put your photo filename here
+      miss:"Jiga Ștefania",     missClass:"IX A",
+      mister:"Vărzar Luca",     misterClass:"IX D",
+      order:"Perechea a 4-a"
+    },
+    {
+      id:"couple2", theme:"Nephthys și Ra",
+      photo: "couple2.jpg",
+      miss:"Nistor Natalia",    missClass:"IX D",
+      mister:"Cotrău Răzvan",   misterClass:"IX B",
+      order:"Perechea a 3-a"
+    },
+    {
+      id:"couple3", theme:"Cleopatra și Ramses",
+      photo: "couple3.jpg",
+      miss:"Popoviciu Claudia", missClass:"IX A",
+      mister:"Pop Alessandro",  misterClass:"IX D",
+      order:"Perechea a 2-a"
+    },
+    {
+      id:"couple4", theme:"Isis și Osiris",
+      photo: "couple4.jpg",
+      miss:"Andrași Bianca",    missClass:"IX A",
+      mister:"Sudrijan Cătălin",misterClass:"X D",
+      order:"Prima Pereche"
+    }
   ];
+
   const misses = [
     { id:"miss1", name:"Jiga Ștefania",     cls:"IX A", emoji:"🌺" },
     { id:"miss2", name:"Nistor Natalia",    cls:"IX D", emoji:"🌸" },
@@ -385,7 +477,7 @@ footer {
   ];
   const misters = [
     { id:"mister1", name:"Vărzar Luca",      cls:"IX D", emoji:"🦅" },
-    { id:"mister2", name:"Cotrău Răzvan",    cls:"IX B", emoji:"⚔️" },
+    { id:"mister2", name:"Cotrău Răzvan",    cls:"IX B", emoji:"⚔️"  },
     { id:"mister3", name:"Pop Alessandro",   cls:"IX D", emoji:"🏆" },
     { id:"mister4", name:"Sudrijan Cătălin", cls:"X D",  emoji:"👑" }
   ];
@@ -399,98 +491,99 @@ footer {
     if (s) { hasVoted = true; voted = JSON.parse(s); }
   } catch(e) {}
 
-  /* ── SELECTIONS (single source of truth) ── */
-  const sel = { couple: null, miss: null, mister: null };
+  const sel = { couple:null, miss:null, mister:null };
 
   /* ── PROGRESS ── */
   function updateProgress() {
     let allDone = true;
     for (const type of ["couple","miss","mister"]) {
       const item = document.getElementById(`prog-${type}`);
-      if (sel[type]) {
-        item.classList.add("done");
-      } else {
-        item.classList.remove("done");
-        allDone = false;
-      }
+      if (sel[type]) { item.classList.add("done"); }
+      else           { item.classList.remove("done"); allDone = false; }
     }
     const btn = document.getElementById("btn");
     btn.disabled = !allDone;
     btn.classList.toggle("ready", allDone);
   }
 
-  /* ── CARD BUILDER ── */
-  function makeCard(html, id, type) {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.dataset.id   = id;
-    div.dataset.type = type;
-    if (hasVoted && voted[type] === id) div.classList.add("voted");
-    div.innerHTML = html + `
-      <div class="card-bot">
-        <span class="chk">${hasVoted && voted[type] === id ? "✓" : ""}</span>
-        <span>${hasVoted && voted[type] === id ? "Votul Tău" : "Selectează"}</span>
-      </div>
-      <div class="card-glow"></div>`;
-    return div;
-  }
-
-  /* ── RENDER ── */
+  /* ── RENDER COUPLES ── */
   function renderCouples() {
     const grid = document.getElementById("grid-couple");
     grid.innerHTML = "";
     couples.forEach(c => {
-      const html = `
-        <div class="card-order">${c.order}</div>
-        <span class="card-emoji">${c.emoji}</span>
-        <div class="card-theme">${c.theme}</div>
-        <div class="card-rule"></div>
-        <div class="couple-members">
-          <div class="member">
-            <div class="member-sym">♀</div>
-            <div class="member-name">${c.miss}</div>
-            <div class="member-cls">Clasa ${c.missClass}</div>
+      const isVoted = hasVoted && voted.couple === c.id;
+      const div = document.createElement("div");
+      div.className = "card couple-card" + (isVoted ? " voted" : "");
+      div.dataset.id   = c.id;
+      div.dataset.type = "couple";
+
+      div.innerHTML = `
+        <div class="couple-photo">
+          <img src="${c.photo}" alt="${c.theme}"
+               onerror="this.style.display='none';this.parentElement.classList.add('no-photo')">
+          <div class="couple-theme-badge">
+            <div class="card-order">${c.order}</div>
+            <div class="card-theme">${c.theme}</div>
           </div>
-          <div class="couple-sep">𓆣</div>
-          <div class="member">
-            <div class="member-sym">♂</div>
-            <div class="member-name">${c.mister}</div>
-            <div class="member-cls">Clasa ${c.misterClass}</div>
+        </div>
+        <div class="couple-body">
+          <div class="card-rule"></div>
+          <div class="couple-members">
+            <div class="member">
+              <div class="member-sym">♀</div>
+              <div class="member-name">${c.miss}</div>
+              <div class="member-cls">Clasa ${c.missClass}</div>
+            </div>
+            <div class="couple-sep">𓆣</div>
+            <div class="member">
+              <div class="member-sym">♂</div>
+              <div class="member-name">${c.mister}</div>
+              <div class="member-cls">Clasa ${c.misterClass}</div>
+            </div>
           </div>
+        </div>
+        <div class="card-bot">
+          <span class="chk">${isVoted ? "✓" : ""}</span>
+          <span>${isVoted ? "Votul Tău" : "Selectează"}</span>
         </div>`;
-      grid.appendChild(makeCard(html, c.id, "couple"));
+      grid.appendChild(div);
     });
   }
 
+  /* ── RENDER INDIVIDUALS ── */
   function renderIndividuals(list, type, gridId) {
     const grid = document.getElementById(gridId);
     grid.innerHTML = "";
     list.forEach(c => {
-      const html = `
+      const isVoted = hasVoted && voted[type] === c.id;
+      const div = document.createElement("div");
+      div.className = "card ind-card" + (isVoted ? " voted" : "");
+      div.dataset.id   = c.id;
+      div.dataset.type = type;
+      div.innerHTML = `
         <span class="card-emoji">${c.emoji}</span>
         <div class="ind-name">${c.name}</div>
-        <div class="ind-cls">Clasa ${c.cls}</div>`;
-      grid.appendChild(makeCard(html, c.id, type));
+        <div class="ind-cls">Clasa ${c.cls}</div>
+        <div class="card-bot">
+          <span class="chk">${isVoted ? "✓" : ""}</span>
+          <span>${isVoted ? "Votul Tău" : "Selectează"}</span>
+        </div>`;
+      grid.appendChild(div);
     });
   }
 
-  /* ── SINGLE CLICK HANDLER on document ── */
+  /* ── SINGLE CLICK HANDLER ── */
   document.addEventListener("click", e => {
     if (hasVoted) return;
     const card = e.target.closest(".card");
     if (!card) return;
-
     const type = card.dataset.type;
     const id   = card.dataset.id;
     if (!type || !id) return;
 
-    // Deselect all cards of same type
     document.querySelectorAll(`.card[data-type="${type}"]`).forEach(c => c.classList.remove("selected"));
-
-    // Select this one
     card.classList.add("selected");
     sel[type] = id;
-
     updateProgress();
   });
 
@@ -502,20 +595,16 @@ footer {
     btn.textContent = "Se oferă votul...";
     try {
       await Promise.all([
-        runTransaction(ref(db, `votes/${sel.couple}`),  v => (v||0) + 1),
-        runTransaction(ref(db, `votes/${sel.miss}`),    v => (v||0) + 1),
-        runTransaction(ref(db, `votes/${sel.mister}`),  v => (v||0) + 1),
+        runTransaction(ref(db, `votes/${sel.couple}`),  v => (v||0)+1),
+        runTransaction(ref(db, `votes/${sel.miss}`),    v => (v||0)+1),
+        runTransaction(ref(db, `votes/${sel.mister}`),  v => (v||0)+1),
       ]);
-      localStorage.setItem(VOTE_KEY, JSON.stringify({ ...sel }));
-      hasVoted = true;
-      voted = { ...sel };
+      localStorage.setItem(VOTE_KEY, JSON.stringify({...sel}));
+      hasVoted = true; voted = {...sel};
 
-      // Show overlay
-      const ov = document.getElementById("overlay");
-      ov.classList.add("on");
-      setTimeout(() => ov.classList.remove("on"), 4500);
+      document.getElementById("overlay").classList.add("on");
+      setTimeout(() => document.getElementById("overlay").classList.remove("on"), 4500);
 
-      // Re-render as voted state
       renderCouples();
       renderIndividuals(misses,  "miss",   "grid-miss");
       renderIndividuals(misters, "mister", "grid-mister");
