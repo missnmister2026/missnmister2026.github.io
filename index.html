@@ -15,20 +15,17 @@
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
-
 body {
   background: var(--bg);
   background-image:
     radial-gradient(ellipse 90% 50% at 50% -5%, rgba(201,162,39,.14) 0%, transparent 60%),
     radial-gradient(ellipse 70% 40% at 50% 105%, rgba(232,132,26,.07) 0%, transparent 60%);
-  color: var(--tx);
-  font-family: 'EB Garamond', serif;
-  min-height: 100vh;
-  overflow-x: hidden;
+  color: var(--tx); font-family:'EB Garamond',serif;
+  min-height:100vh; overflow-x:hidden;
 }
 body::after {
   content:''; position:fixed; top:0; left:0; right:0; height:3px;
-  background: linear-gradient(90deg, transparent, var(--gold), var(--amber), var(--gold), transparent);
+  background:linear-gradient(90deg,transparent,var(--gold),var(--amber),var(--gold),transparent);
   z-index:999;
 }
 
@@ -36,12 +33,12 @@ body::after {
 .hero { text-align:center; padding:56px 20px 34px; position:relative; z-index:1; }
 .sun {
   font-size:2.8rem; margin-bottom:16px; display:block;
-  filter: drop-shadow(0 0 24px rgba(201,162,39,.85));
-  animation: gp 3s ease-in-out infinite;
+  filter:drop-shadow(0 0 24px rgba(201,162,39,.85));
+  animation:gp 3s ease-in-out infinite;
 }
 @keyframes gp {
-  0%,100% { filter:drop-shadow(0 0 14px rgba(201,162,39,.6)); }
-  50%      { filter:drop-shadow(0 0 34px rgba(201,162,39,1)); }
+  0%,100%{filter:drop-shadow(0 0 14px rgba(201,162,39,.6))}
+  50%    {filter:drop-shadow(0 0 34px rgba(201,162,39,1))}
 }
 .hero-school { font-family:'Cinzel',serif; font-size:.66rem; letter-spacing:.42em; color:var(--gold-d); margin-bottom:14px; }
 .hero-title {
@@ -58,60 +55,57 @@ body::after {
 .divider span { color:var(--gold); font-size:.95rem; letter-spacing:.28em; }
 .hero-instr { font-size:1rem; color:var(--tx-d); font-style:italic; max-width:420px; margin:0 auto; line-height:1.7; }
 
-/* ── VOTING CLOSED BANNER ── */
-#voting-closed {
-  display: none;
-  max-width: 600px;
-  margin: 0 auto 10px;
-  padding: 0 16px;
-  position: relative;
-  z-index: 1;
+/* ── STATUS BANNERS ── */
+.status-banner { display:none; max-width:600px; margin:0 auto 10px; padding:0 16px; position:relative; z-index:1; }
+
+.banner-box {
+  border:1px solid; padding:32px 28px; text-align:center; position:relative; overflow:hidden;
 }
-.closed-box {
-  border: 1px solid rgba(201,162,39,.35);
-  background: linear-gradient(135deg, rgba(201,162,39,.07), rgba(232,132,26,.04));
-  padding: 32px 28px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.banner-box::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.banner-box::after  { content:''; position:absolute; bottom:0; left:0; right:0; height:1px; }
+
+/* NOT STARTED */
+#banner-pending .banner-box {
+  border-color:rgba(201,162,39,.35);
+  background:linear-gradient(135deg,rgba(201,162,39,.07),rgba(232,132,26,.04));
 }
-.closed-box::before {
-  content: '';
-  position: absolute; top:0; left:0; right:0; height:2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+#banner-pending .banner-box::before { background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+#banner-pending .banner-box::after  { background:linear-gradient(90deg,transparent,var(--gold-d),transparent); }
+#banner-pending .b-icon  { color:var(--gold); }
+#banner-pending .b-title { background:linear-gradient(135deg,var(--gold-l),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* ENDED */
+#banner-ended .banner-box {
+  border-color:rgba(201,162,39,.5);
+  background:linear-gradient(135deg,rgba(201,162,39,.1),rgba(232,132,26,.06));
 }
-.closed-box::after {
-  content: '';
-  position: absolute; bottom:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, transparent, var(--gold-d), transparent);
+#banner-ended .banner-box::before { background:linear-gradient(90deg,transparent,var(--gold-l),var(--gold),transparent); }
+#banner-ended .banner-box::after  { background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+#banner-ended .b-icon  { color:var(--gold-l); }
+#banner-ended .b-title { background:linear-gradient(135deg,var(--gold-l),var(--amber)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+.b-icon {
+  font-size:2.6rem; display:block; margin-bottom:14px;
+  filter:drop-shadow(0 0 18px rgba(201,162,39,.75));
+  animation:gp 3s ease-in-out infinite;
 }
-.closed-icon {
-  font-size: 2.4rem; display:block; margin-bottom:14px;
-  filter: drop-shadow(0 0 16px rgba(201,162,39,.7));
-  animation: gp 3s ease-in-out infinite;
+.b-title {
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1rem,3vw,1.4rem); margin-bottom:10px; line-height:1.3;
 }
-.closed-title {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(1rem, 3vw, 1.35rem);
-  background: linear-gradient(135deg, var(--gold-l), var(--gold));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  margin-bottom: 10px;
-  line-height: 1.3;
+.b-sub {
+  font-family:'Cinzel',serif; font-size:.76rem; letter-spacing:.2em;
+  color:var(--tx-d); line-height:1.7;
 }
-.closed-sub {
-  font-family: 'Cinzel', serif;
-  font-size: .78rem; letter-spacing:.22em;
-  color: var(--tx-d);
-  line-height: 1.7;
+.b-date {
+  display:inline-block; margin-top:14px;
+  font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:.28em;
+  color:var(--amber); border:1px solid rgba(232,132,26,.3); padding:5px 18px;
 }
-.closed-date {
-  display: inline-block;
-  margin-top: 14px;
-  font-family: 'Cinzel', serif;
-  font-size: .72rem; letter-spacing:.28em;
-  color: var(--amber);
-  border: 1px solid rgba(232,132,26,.3);
-  padding: 5px 18px;
+/* ended sparkle row */
+.b-sparkle {
+  display:flex; justify-content:center; gap:8px; margin-top:16px; font-size:1.2rem;
+  filter:drop-shadow(0 0 8px rgba(201,162,39,.6));
 }
 
 /* ── WRAP ── */
@@ -129,13 +123,11 @@ body::after {
 
 /* ── CARD BASE ── */
 .card {
-  position:relative;
-  background:linear-gradient(155deg,var(--bg3),var(--bg2));
+  position:relative; background:linear-gradient(155deg,var(--bg3),var(--bg2));
   border:1px solid rgba(201,162,39,.17);
   cursor:pointer; overflow:hidden; text-align:center;
   transition:border-color .3s, transform .28s, box-shadow .28s;
-  -webkit-tap-highlight-color:transparent;
-  user-select:none;
+  -webkit-tap-highlight-color:transparent; user-select:none;
 }
 .card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(201,162,39,.07),transparent); opacity:0; transition:opacity .3s; pointer-events:none; z-index:1; }
 .card:hover::before { opacity:1; }
@@ -145,12 +137,8 @@ body::after {
 .card.voted    { border-color:var(--gold); cursor:default; }
 .card::after   { content:'◆'; position:absolute; top:7px; right:8px; font-size:.35rem; color:var(--gold-d); opacity:.4; pointer-events:none; z-index:2; }
 
-/* disabled state when voting is closed */
-.voting-locked .card {
-  opacity: .5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
+/* locked state */
+.voting-locked .card { opacity:.45; cursor:not-allowed; pointer-events:none; }
 .voting-locked .card:hover { transform:none; box-shadow:none; border-color:rgba(201,162,39,.17); }
 
 /* ── COUPLE CARD ── */
@@ -193,12 +181,9 @@ body::after {
 #btn {
   font-family:'Cinzel Decorative',serif;
   font-size:clamp(.82rem,2.5vw,1rem); letter-spacing:.18em;
-  color:var(--bg);
-  background:linear-gradient(135deg,var(--gold-d),var(--gold-d));
-  border:1px solid var(--gold-d);
-  padding:15px clamp(28px,8vw,56px);
-  cursor:not-allowed; opacity:.35; transition:all .4s;
-  width:clamp(200px,80%,340px);
+  color:var(--bg); background:linear-gradient(135deg,var(--gold-d),var(--gold-d));
+  border:1px solid var(--gold-d); padding:15px clamp(28px,8vw,56px);
+  cursor:not-allowed; opacity:.35; transition:all .4s; width:clamp(200px,80%,340px);
 }
 #btn.ready {
   background:linear-gradient(135deg,var(--amber),var(--gold),var(--gold-l));
@@ -206,8 +191,8 @@ body::after {
   animation:bg-glow 2s ease-in-out infinite;
 }
 @keyframes bg-glow {
-  0%,100% { box-shadow:0 0 18px rgba(201,162,39,.4); }
-  50%      { box-shadow:0 0 44px rgba(201,162,39,.85),0 0 80px rgba(201,162,39,.22); }
+  0%,100%{box-shadow:0 0 18px rgba(201,162,39,.4)}
+  50%    {box-shadow:0 0 44px rgba(201,162,39,.85),0 0 80px rgba(201,162,39,.22)}
 }
 #btn.ready:hover { transform:scale(1.03); }
 #btn.ready:active { transform:scale(.98); }
@@ -240,23 +225,23 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 ::-webkit-scrollbar{width:5px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px}
 
 /* ── MOBILE ── */
-@media (max-width:600px) {
-  .hero { padding:44px 16px 28px; }
-  .hero-school { letter-spacing:.22em; font-size:.6rem; }
-  .grid-couple { grid-template-columns:1fr; gap:14px; }
-  .grid-ind    { grid-template-columns:1fr 1fr; gap:12px; }
-  .ind-card { padding:18px 13px 15px; }
-  .couple-theme-badge .card-theme { font-size:.8rem; }
-  .couple-members { gap:6px; }
-  .member-name { font-size:.7rem; }
-  .prog-row { gap:10px; }
-  .prog-item { font-size:.6rem; }
-  .closed-box { padding:26px 18px; }
-  .closed-sub { font-size:.72rem; letter-spacing:.14em; }
+@media(max-width:600px){
+  .hero{padding:44px 16px 28px}
+  .hero-school{letter-spacing:.22em;font-size:.6rem}
+  .grid-couple{grid-template-columns:1fr;gap:14px}
+  .grid-ind{grid-template-columns:1fr 1fr;gap:12px}
+  .ind-card{padding:18px 13px 15px}
+  .couple-theme-badge .card-theme{font-size:.8rem}
+  .couple-members{gap:6px}
+  .member-name{font-size:.7rem}
+  .prog-row{gap:10px}
+  .prog-item{font-size:.6rem}
+  .banner-box{padding:24px 16px}
+  .b-sub{font-size:.68rem;letter-spacing:.13em}
 }
-@media (max-width:380px) {
-  .grid-ind { grid-template-columns:1fr; }
-  .hero-title { font-size:1.8rem; }
+@media(max-width:380px){
+  .grid-ind{grid-template-columns:1fr}
+  .hero-title{font-size:1.8rem}
 }
 </style>
 </head>
@@ -272,22 +257,34 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   <p class="hero-instr">Votează perechea favorită, Miss‑ul și Mister‑ul preferat.<br>Fiecare dispozitiv poate vota o singură dată.</p>
 </div>
 
-<!-- VOTING CLOSED BANNER (shown when voting is inactive) -->
-<div id="voting-closed">
-  <div class="closed-box">
-    <span class="closed-icon">𓂀</span>
-    <div class="closed-title">Votarea Nu A Început Încă</div>
-    <div class="closed-sub">
-      <br>
+<!-- BANNER: not started yet -->
+<div class="status-banner" id="banner-pending">
+  <div class="banner-box">
+    <span class="b-icon">𓂀</span>
+    <div class="b-title">Votarea Nu A Început Încă</div>
+    <div class="b-sub">
+    
     </div>
-    <div class="closed-date">3 Aprilie · Ora 18:00</div>
+    <div class="b-date">3 Aprilie · Ora 18:00</div>
   </div>
 </div>
 
-<!-- VOTING -->
+<!-- BANNER: voting ended -->
+<div class="status-banner" id="banner-ended">
+  <div class="banner-box">
+    <span class="b-icon">☥</span>
+    <div class="b-title">Votarea S‑a Încheiat</div>
+    <div class="b-sub">
+     <br>
+      Mulțumim tuturor celor care au votat!<br>
+      Câștigătorii vor fi anunțați în scurt timp.
+    </div>
+  </div>
+</div>
+
+<!-- VOTING CONTENT -->
 <div class="wrap" id="voting-wrap">
 
-  <!-- Couples -->
   <div class="sec-head">
     <div class="sec-tag">✦ Categoria I ✦</div>
     <h2 class="sec-title">Perechea Favorită</h2>
@@ -295,7 +292,6 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   </div>
   <div class="grid-couple" id="grid-couple"></div>
 
-  <!-- Miss -->
   <div class="sec-head">
     <div class="sec-tag">✦ Categoria II ✦</div>
     <h2 class="sec-title">Miss Liceu</h2>
@@ -303,7 +299,6 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   </div>
   <div class="grid-ind" id="grid-miss"></div>
 
-  <!-- Mister -->
   <div class="sec-head">
     <div class="sec-tag">✦ Categoria III ✦</div>
     <h2 class="sec-title">Mister Liceu</h2>
@@ -311,7 +306,6 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   </div>
   <div class="grid-ind" id="grid-mister"></div>
 
-  <!-- Submit -->
   <div id="submit-wrap">
     <button id="btn" disabled>Trimite Votul</button>
     <div class="prog-row">
@@ -366,60 +360,68 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 
   /* ── STATE ── */
   const VOTE_KEY = "pharaohs_night_v4";
-  let hasVoted = false;
-  let voted    = {};
-  let votingActive = false;
-
-  try {
-    const s = localStorage.getItem(VOTE_KEY);
-    if (s) { hasVoted = true; voted = JSON.parse(s); }
-  } catch(e) {}
+  let hasVoted = false, voted = {};
+  try { const s = localStorage.getItem(VOTE_KEY); if(s){hasVoted=true;voted=JSON.parse(s);} } catch(e){}
 
   const sel = { couple:null, miss:null, mister:null };
 
-  /* ── LISTEN TO votingActive FLAG ── */
-  onValue(ref(db, "settings/votingActive"), snap => {
-    votingActive = snap.val() === true;
-    applyVotingState();
+  // "pending" | "active" | "ended"
+  let votingState = "pending";
+
+  /* ── LISTEN TO FIREBASE SETTINGS ── */
+  onValue(ref(db, "settings"), snap => {
+    const s = snap.val() || {};
+    if (s.votingEnded === true) {
+      votingState = "ended";
+    } else if (s.votingActive === true) {
+      votingState = "active";
+    } else {
+      votingState = "pending";
+    }
+    applyState();
   });
 
-  function applyVotingState() {
-    const closedBanner = document.getElementById("voting-closed");
-    const votingWrap   = document.getElementById("voting-wrap");
+  /* ── APPLY STATE ── */
+  function applyState() {
+    const pendingBanner = document.getElementById("banner-pending");
+    const endedBanner   = document.getElementById("banner-ended");
+    const grids = ["grid-couple","grid-miss","grid-mister"];
 
-    if (votingActive) {
-      // Voting is OPEN
-      closedBanner.style.display = "none";
-      votingWrap.style.display   = "block";
-      // remove lock from grids
-      ["grid-couple","grid-miss","grid-mister"].forEach(id => {
-        document.getElementById(id)?.classList.remove("voting-locked");
-      });
-      // re-evaluate button state
+    // hide both banners first
+    pendingBanner.style.display = "none";
+    endedBanner.style.display   = "none";
+
+    if (votingState === "active") {
+      // Cards clickable, button works normally
+      grids.forEach(id => document.getElementById(id)?.classList.remove("voting-locked"));
       if (!hasVoted) updateProgress();
-    } else {
-      // Voting is CLOSED
-      closedBanner.style.display = "block";
-      votingWrap.style.display   = "block"; // still show cards but locked
-      ["grid-couple","grid-miss","grid-mister"].forEach(id => {
-        document.getElementById(id)?.classList.add("voting-locked");
-      });
-      // disable submit button hard
-      const btn = document.getElementById("btn");
-      if (btn && !hasVoted) {
-        btn.disabled = true;
-        btn.classList.remove("ready");
-      }
+
+    } else if (votingState === "pending") {
+      pendingBanner.style.display = "block";
+      grids.forEach(id => document.getElementById(id)?.classList.add("voting-locked"));
+      lockButton();
+
+    } else if (votingState === "ended") {
+      endedBanner.style.display = "block";
+      grids.forEach(id => document.getElementById(id)?.classList.add("voting-locked"));
+      if (!hasVoted) lockButton();
     }
+  }
+
+  function lockButton() {
+    const btn = document.getElementById("btn");
+    if (!btn || hasVoted) return;
+    btn.disabled = true;
+    btn.classList.remove("ready");
   }
 
   /* ── PROGRESS ── */
   function updateProgress() {
-    if (!votingActive || hasVoted) return;
+    if (votingState !== "active" || hasVoted) return;
     let allDone = true;
     for (const type of ["couple","miss","mister"]) {
       const item = document.getElementById(`prog-${type}`);
-      if (sel[type]) { item.classList.add("done"); }
+      if (sel[type]) item.classList.add("done");
       else           { item.classList.remove("done"); allDone = false; }
     }
     const btn = document.getElementById("btn");
@@ -427,7 +429,7 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
     btn.classList.toggle("ready", allDone);
   }
 
-  /* ── RENDER COUPLES ── */
+  /* ── RENDER ── */
   function renderCouples() {
     const grid = document.getElementById("grid-couple");
     grid.innerHTML = "";
@@ -435,8 +437,7 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
       const isVoted = hasVoted && voted.couple === c.id;
       const div = document.createElement("div");
       div.className = "card couple-card" + (isVoted ? " voted" : "");
-      div.dataset.id   = c.id;
-      div.dataset.type = "couple";
+      div.dataset.id = c.id; div.dataset.type = "couple";
       div.innerHTML = `
         <div class="couple-photo">
           <img src="${c.photo}" alt="${c.theme}" onerror="this.style.display='none'">
@@ -448,28 +449,19 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
         <div class="couple-body">
           <div class="card-rule"></div>
           <div class="couple-members">
-            <div class="member">
-              <div class="member-sym">♀</div>
-              <div class="member-name">${c.miss}</div>
-              <div class="member-cls">Clasa ${c.missClass}</div>
-            </div>
+            <div class="member"><div class="member-sym">♀</div><div class="member-name">${c.miss}</div><div class="member-cls">Clasa ${c.missClass}</div></div>
             <div class="couple-sep">𓆣</div>
-            <div class="member">
-              <div class="member-sym">♂</div>
-              <div class="member-name">${c.mister}</div>
-              <div class="member-cls">Clasa ${c.misterClass}</div>
-            </div>
+            <div class="member"><div class="member-sym">♂</div><div class="member-name">${c.mister}</div><div class="member-cls">Clasa ${c.misterClass}</div></div>
           </div>
         </div>
         <div class="card-bot">
-          <span class="chk">${isVoted ? "✓" : ""}</span>
-          <span>${isVoted ? "Votul Tău" : "Selectează"}</span>
+          <span class="chk">${isVoted?"✓":""}</span>
+          <span>${isVoted?"Votul Tău":"Selectează"}</span>
         </div>`;
       grid.appendChild(div);
     });
   }
 
-  /* ── RENDER INDIVIDUALS ── */
   function renderIndividuals(list, type, gridId) {
     const grid = document.getElementById(gridId);
     grid.innerHTML = "";
@@ -477,15 +469,14 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
       const isVoted = hasVoted && voted[type] === c.id;
       const div = document.createElement("div");
       div.className = "card ind-card" + (isVoted ? " voted" : "");
-      div.dataset.id   = c.id;
-      div.dataset.type = type;
+      div.dataset.id = c.id; div.dataset.type = type;
       div.innerHTML = `
         <span class="card-emoji">${c.emoji}</span>
         <div class="ind-name">${c.name}</div>
         <div class="ind-cls">Clasa ${c.cls}</div>
         <div class="card-bot">
-          <span class="chk">${isVoted ? "✓" : ""}</span>
-          <span>${isVoted ? "Votul Tău" : "Selectează"}</span>
+          <span class="chk">${isVoted?"✓":""}</span>
+          <span>${isVoted?"Votul Tău":"Selectează"}</span>
         </div>`;
       grid.appendChild(div);
     });
@@ -493,11 +484,10 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 
   /* ── CLICK HANDLER ── */
   document.addEventListener("click", e => {
-    if (hasVoted || !votingActive) return;
+    if (hasVoted || votingState !== "active") return;
     const card = e.target.closest(".card");
     if (!card) return;
-    const type = card.dataset.type;
-    const id   = card.dataset.id;
+    const type = card.dataset.type, id = card.dataset.id;
     if (!type || !id) return;
     document.querySelectorAll(`.card[data-type="${type}"]`).forEach(c => c.classList.remove("selected"));
     card.classList.add("selected");
@@ -507,26 +497,22 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 
   /* ── SUBMIT ── */
   document.getElementById("btn").addEventListener("click", async () => {
-    if (hasVoted || !sel.couple || !sel.miss || !sel.mister || !votingActive) return;
+    if (hasVoted || !sel.couple || !sel.miss || !sel.mister || votingState !== "active") return;
     const btn = document.getElementById("btn");
-    btn.disabled = true;
-    btn.textContent = "Se oferă votul...";
+    btn.disabled = true; btn.textContent = "Se oferă votul...";
     try {
       await Promise.all([
-        runTransaction(ref(db, `votes/${sel.couple}`),  v => (v||0)+1),
-        runTransaction(ref(db, `votes/${sel.miss}`),    v => (v||0)+1),
-        runTransaction(ref(db, `votes/${sel.mister}`),  v => (v||0)+1),
+        runTransaction(ref(db,`votes/${sel.couple}`),  v=>(v||0)+1),
+        runTransaction(ref(db,`votes/${sel.miss}`),    v=>(v||0)+1),
+        runTransaction(ref(db,`votes/${sel.mister}`),  v=>(v||0)+1),
       ]);
       localStorage.setItem(VOTE_KEY, JSON.stringify({...sel}));
       hasVoted = true; voted = {...sel};
-
       document.getElementById("overlay").classList.add("on");
-      setTimeout(() => document.getElementById("overlay").classList.remove("on"), 4500);
-
+      setTimeout(()=>document.getElementById("overlay").classList.remove("on"), 4500);
       renderCouples();
-      renderIndividuals(misses,  "miss",   "grid-miss");
-      renderIndividuals(misters, "mister", "grid-mister");
-
+      renderIndividuals(misses,"miss","grid-miss");
+      renderIndividuals(misters,"mister","grid-mister");
       document.getElementById("submit-wrap").innerHTML = `
         <div class="voted-box">
           <span class="ankh">☥</span>
@@ -535,17 +521,15 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
         </div>`;
     } catch(err) {
       console.error(err);
-      btn.disabled = false;
-      btn.textContent = "Trimite Votul";
+      btn.disabled = false; btn.textContent = "Trimite Votul";
       alert("Eroare. Te rugăm să încerci din nou.");
     }
   });
 
   /* ── INIT ── */
   renderCouples();
-  renderIndividuals(misses,  "miss",   "grid-miss");
-  renderIndividuals(misters, "mister", "grid-mister");
-
+  renderIndividuals(misses,"miss","grid-miss");
+  renderIndividuals(misters,"mister","grid-mister");
   if (hasVoted) {
     document.getElementById("submit-wrap").innerHTML = `
       <div class="voted-box">
@@ -555,6 +539,5 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
       </div>`;
   }
 </script>
-
 </body>
 </html>
