@@ -254,7 +254,7 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   <h1 class="hero-title">Night of the<br>Pharaohs</h1>
   <div class="hero-sub">Miss & Mister Liceu · 3 Aprilie · Ora 18:00</div>
   <div class="divider"><span>𓂀 𓆣 𓂀</span></div>
-  <p class="hero-instr">Votează perechea favorită, Miss‑ul și Mister‑ul preferat.<br>Fiecare dispozitiv poate vota o singură dată.</p>
+  <p class="hero-instr">Votează perechea favorită.<br>Fiecare dispozitiv poate vota o singură dată.</p>
 </div>
 
 <!-- BANNER: not started yet -->
@@ -286,32 +286,15 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 <div class="wrap" id="voting-wrap">
 
   <div class="sec-head">
-    <div class="sec-tag">✦ Categoria I ✦</div>
     <h2 class="sec-title">Perechea Favorită</h2>
     <p class="sec-desc">Alege perechea demnă de binecuvântarea Faraonului</p>
   </div>
   <div class="grid-couple" id="grid-couple"></div>
 
-  <div class="sec-head">
-    <div class="sec-tag">✦ Categoria II ✦</div>
-    <h2 class="sec-title">Miss Liceu</h2>
-    <p class="sec-desc">Zeița care va purta coroana de aur</p>
-  </div>
-  <div class="grid-ind" id="grid-miss"></div>
-
-  <div class="sec-head">
-    <div class="sec-tag">✦ Categoria III ✦</div>
-    <h2 class="sec-title">Mister Liceu</h2>
-    <p class="sec-desc">Faraonul care va domni cu onoare</p>
-  </div>
-  <div class="grid-ind" id="grid-mister"></div>
-
   <div id="submit-wrap">
     <button id="btn" disabled>Trimite Votul</button>
     <div class="prog-row">
       <div class="prog-item" id="prog-couple"><span class="prog-dot"></span><span>PERECHE</span></div>
-      <div class="prog-item" id="prog-miss">  <span class="prog-dot"></span><span>MISS</span></div>
-      <div class="prog-item" id="prog-mister"><span class="prog-dot"></span><span>MISTER</span></div>
     </div>
   </div>
 
@@ -340,10 +323,10 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 
   /* ── DATA ── */
   const couples = [
-    { id:"couple1", theme:"Hathor și Horus",    photo:"couple1.jpg", miss:"Jiga Ștefania",     missClass:"IX A", mister:"Vărzar Luca",      misterClass:"IX D", order:"Perechea a 4-a" },
-    { id:"couple2", theme:"Nephthys și Ra",      photo:"couple2.jpg", miss:"Nistor Natalia",    missClass:"IX D", mister:"Cotrău Răzvan",    misterClass:"IX B", order:"Perechea a 3-a" },
-    { id:"couple3", theme:"Cleopatra și Ramses", photo:"couple3.jpg", miss:"Popoviciu Claudia", missClass:"IX A", mister:"Pop Alessandro",   misterClass:"IX D", order:"Perechea a 2-a" },
-    { id:"couple4", theme:"Isis și Osiris",      photo:"couple4.jpg", miss:"Andrași Bianca",    missClass:"IX A", mister:"Sudrijan Cătălin", misterClass:"X D",  order:"Prima Pereche"  }
+    { id:"couple4", theme:"Hathor și Horus",    photo:"couple4.jpg", miss:"Jiga Ștefania",     missClass:"IX A", mister:"Vărzar Luca",      misterClass:"IX D", order:"Perechea a 4-a" },
+    { id:"couple3", theme:"Nephthys și Ra",      photo:"couple3.jpg", miss:"Nistor Natalia",    missClass:"IX D", mister:"Cotrău Răzvan",    misterClass:"IX B", order:"Perechea a 3-a" },
+    { id:"couple2", theme:"Cleopatra și Ramses", photo:"couple2.jpg", miss:"Popoviciu Claudia", missClass:"IX A", mister:"Pop Alessandro",   misterClass:"IX D", order:"Perechea a 2-a" },
+    { id:"couple1", theme:"Isis și Osiris",      photo:"couple1.jpg", miss:"Andrași Bianca",    missClass:"IX A", mister:"Sudrijan Cătălin", misterClass:"X D",  order:"Prima Pereche"  }
   ];
   const misses = [
     { id:"miss1", name:"Jiga Ștefania",     cls:"IX A", emoji:"🌺" },
@@ -363,7 +346,7 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   let hasVoted = false, voted = {};
   try { const s = localStorage.getItem(VOTE_KEY); if(s){hasVoted=true;voted=JSON.parse(s);} } catch(e){}
 
-  const sel = { couple:null, miss:null, mister:null };
+  const sel = { couple:null };
 
   // "pending" | "active" | "ended"
   let votingState = "pending";
@@ -385,7 +368,7 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   function applyState() {
     const pendingBanner = document.getElementById("banner-pending");
     const endedBanner   = document.getElementById("banner-ended");
-    const grids = ["grid-couple","grid-miss","grid-mister"];
+    const grids = ["grid-couple"];
 
     // hide both banners first
     pendingBanner.style.display = "none";
@@ -419,7 +402,7 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
   function updateProgress() {
     if (votingState !== "active" || hasVoted) return;
     let allDone = true;
-    for (const type of ["couple","miss","mister"]) {
+    for (const type of ["couple"]) {
       const item = document.getElementById(`prog-${type}`);
       if (sel[type]) item.classList.add("done");
       else           { item.classList.remove("done"); allDone = false; }
@@ -462,26 +445,6 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
     });
   }
 
-  function renderIndividuals(list, type, gridId) {
-    const grid = document.getElementById(gridId);
-    grid.innerHTML = "";
-    list.forEach(c => {
-      const isVoted = hasVoted && voted[type] === c.id;
-      const div = document.createElement("div");
-      div.className = "card ind-card" + (isVoted ? " voted" : "");
-      div.dataset.id = c.id; div.dataset.type = type;
-      div.innerHTML = `
-        <span class="card-emoji">${c.emoji}</span>
-        <div class="ind-name">${c.name}</div>
-        <div class="ind-cls">Clasa ${c.cls}</div>
-        <div class="card-bot">
-          <span class="chk">${isVoted?"✓":""}</span>
-          <span>${isVoted?"Votul Tău":"Selectează"}</span>
-        </div>`;
-      grid.appendChild(div);
-    });
-  }
-
   /* ── CLICK HANDLER ── */
   document.addEventListener("click", e => {
     if (hasVoted || votingState !== "active") return;
@@ -497,22 +460,18 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 
   /* ── SUBMIT ── */
   document.getElementById("btn").addEventListener("click", async () => {
-    if (hasVoted || !sel.couple || !sel.miss || !sel.mister || votingState !== "active") return;
+    if (hasVoted || !sel.couple || votingState !== "active") return;
     const btn = document.getElementById("btn");
     btn.disabled = true; btn.textContent = "Se oferă votul...";
     try {
       await Promise.all([
         runTransaction(ref(db,`votes/${sel.couple}`),  v=>(v||0)+1),
-        runTransaction(ref(db,`votes/${sel.miss}`),    v=>(v||0)+1),
-        runTransaction(ref(db,`votes/${sel.mister}`),  v=>(v||0)+1),
       ]);
       localStorage.setItem(VOTE_KEY, JSON.stringify({...sel}));
       hasVoted = true; voted = {...sel};
       document.getElementById("overlay").classList.add("on");
       setTimeout(()=>document.getElementById("overlay").classList.remove("on"), 4500);
       renderCouples();
-      renderIndividuals(misses,"miss","grid-miss");
-      renderIndividuals(misters,"mister","grid-mister");
       document.getElementById("submit-wrap").innerHTML = `
         <div class="voted-box">
           <span class="ankh">☥</span>
@@ -528,8 +487,6 @@ footer { border-top:1px solid rgba(201,162,39,.12); padding:28px 20px 24px; text
 
   /* ── INIT ── */
   renderCouples();
-  renderIndividuals(misses,"miss","grid-miss");
-  renderIndividuals(misters,"mister","grid-mister");
   if (hasVoted) {
     document.getElementById("submit-wrap").innerHTML = `
       <div class="voted-box">
